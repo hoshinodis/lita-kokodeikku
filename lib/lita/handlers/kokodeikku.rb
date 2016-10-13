@@ -16,9 +16,11 @@ module Lita
         start_at = datetime(Time.new(time.year, time.month - 1, 1))
         end_at = datetime(Time.new(time.year, time.month, 1))
         client = connect
-        select_query = "select name, count(ikku) ik from #{TABLE_NAME} where moment_at between '#{start_at}' and '#{end_at}' group by id order by ik desc"
+        select_query = "select id, count(ikku) as ik from #{TABLE_NAME} where moment_at between '#{start_at}' and '#{end_at}' group by id order by ik desc"
         result = client.query(select_query).first
-        reply = "先月の Haiker of The Month は #{result['name']}さんです。 詠んだ俳句は #{result['ik']} 件でした。おめでとうございます。"
+        select_query = "select name from #{TABLE_NAME} where id = '#{result['id']}'"
+        result2 = client.query(select_query).first
+        reply = "先月の Haiker of The Month は #{result2['name']}さんです。 詠んだ俳句は #{result['ik']} 件でした。おめでとうございます。"
         response.reply(reply)
       end
 
