@@ -38,7 +38,7 @@ module Lita
 
           time = Time.now
           client = connect
-          insert_query = "insert into #{TABLE_NAME} (id, name, ikku, moment_at) values('#{response.user.id}', '#{response.user.name}', '#{song.phrases.map(&:join).join(' ')}', '#{datetime(time)}'"
+          insert_query = "insert into #{TABLE_NAME} (id, name, ikku, moment_at) values('#{response.user.id}', '#{response.user.name}', '#{song.phrases.map(&:join).join(' ')}', '#{datetime(time)}')"
           client.query(insert_query)
         end
       end
