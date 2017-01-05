@@ -9,11 +9,19 @@ module Lita
       def datetime(time)
         time.strftime('%F %T')
       end
+      
+      def prev_month(time)
+        if time.month == 1
+          Time.new(time.year - 1, 12, 1)
+        else
+          Time.new(time.year, time.month - 1, 1)
+        end
+      end
 
       route(/^今月のハイカー$/, :monthly_singer)
       def monthly_singer(response)
         time = Time.now
-        start_at = datetime(Time.new(time.year, time.month - 1, 1))
+        start_at = datetime(prev_month(time))
         end_at = datetime(Time.new(time.year, time.month, 1))
         client = connect
         select_query = "select id, count(ikku) as ik from #{TABLE_NAME} where moment_at between '#{start_at}' and '#{end_at}' group by id order by ik desc"
