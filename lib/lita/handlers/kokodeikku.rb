@@ -37,7 +37,16 @@ module Lita
         client = connect
         select_query = "select name, ikku from #{TABLE_NAME} order by moment_at desc"
         result = client.query(select_query).first
-        reply = "最近の俳句は #{result['name']}さんの「 #{result['ikku']}」です。"
+        reply = "最新の俳句は #{result['name']}さんの「 #{result['ikku']}」です。"
+        response.reply(reply)
+      end
+      
+      route(/^今日の一句$/, :random_song)
+      def random_song(response)
+        client = connect
+        select_query = "select name, ikku from #{TABLE_NAME} order by RAND() limit 1"
+        result = client.query(select_query).first
+        reply = "「 #{result['ikku']}」　詠人: #{result['name']}"
         response.reply(reply)
       end
 
